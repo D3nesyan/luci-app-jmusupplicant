@@ -81,10 +81,6 @@ dnsserver = o:taboption("advanced", Value, "dns", translate("DNS server"))
 dnsserver.description = translate("DNS server, it doesn't matter")
 dnsserver.default = "0.0.0.0"
 
-timeout = o:taboption("advanced", Value, "timeout", translate("Timeout"))
-timeout.description = translate("Each timeout of the package (seconds)")
-timeout.default = "8"
-
 echointerval = o:taboption("advanced", Value, "echointerval", translate("EchoInterval"))
 echointerval.description = translate("Interval for sending Echo packets (seconds)")
 echointerval.default = "30"
@@ -93,36 +89,9 @@ restartwait = o:taboption("advanced", Value, "restartwait", translate("RestartWa
 restartwait.description = translate("Failed Wait (seconds) Wait for seconds after authentication failed or restart authentication after server request")
 restartwait.default = "15"
 
-startmode = o:taboption("advanced", ListValue, "startmode", translate("StartMode"))
-startmode.description = translate("Multicast address type when searching for servers")
-startmode:value(0, translate("Standard"))
-startmode:value(1, translate("Ruijie"))
-startmode:value(2, translate("Uses JMUSupplicant for Xaar certification"))
-startmode.default = "0"
-
-dhcpmode = o:taboption("advanced", ListValue, "dhcpmode", translate("DhcpMode"))
-dhcpmode.description = translate("DHCP method")
-dhcpmode:value(0, translate("None"))
-dhcpmode:value(1, translate("secondary authentication"))
-dhcpmode:value(2, translate("after certification"))
-dhcpmode:value(3, translate("before certification"))
-dhcpmode.default = "2"
-
-shownotify = o:taboption("advanced", Value, "shownotify", translate("ShowNotify"))
-shownotify.description = translate("Whether to display notifications 0 (no) 1 to 20 (yes)")
-shownotify.default = "5"
-
-version = o:taboption("advanced", Value, "version", translate("Client Version"))
-version.description = translate("Client version number. If client verification is not enabled but the version number is required, it can be specified here. The format is 3.30.")
-version.default = "0.00"
-
 datafile = o:taboption("advanced", Value, "datafile", translate("DataFile"))
 datafile.description = translate("Authentication data file, if you need to verify the client, you need to set correctly")
 datafile.default = "/etc/jmusupplicant/"
-
-dhcpscript = o:taboption("advanced", Value, "dhcpscript", translate("DhcpScript"))
-dhcpscript.description = translate("DHCP script")
-dhcpscript.default = "udhcpc -i"
 
 local apply = luci.http.formvalue("cbi.apply")
 if apply then
