@@ -82,6 +82,21 @@ msgstr "能访问互联网"
 msgid "NOT ONLINE"
 msgstr "不能访问互联网"
 
+msgid "Network Operator"
+msgstr "宽带运营商"
+
+msgid "Education Network"
+msgstr "校园网"
+
+msgid "China Unicom"
+msgstr "中国联通"
+
+msgid "China Mobile"
+msgstr "中国移动"
+
+msgid "China Telecom"
+msgstr "中国电信"
+
 msgid "Settings"
 msgstr "设置"
 
