@@ -45,7 +45,7 @@ run_jmusupplicant()
         if [ "$netoperator" != "0" ] && [ "$netoperator" != "" ]; then cmd=$cmd" -s"$netoperator;fi
         if [ "$datafile" != "/etc/jmusupplicant/" ] &&  [ "$datafile" != "" ]; then cmd=$cmd" -f"$datafile;fi
 
-        /bin/ash -c "jmusupplicant -u$username -p$password -n$ifname -b3 -w $cmd"
+        /bin/ash -c "jmusupplicant -u$username -p$password --interface-card $ifname -b $cmd"
     else
         /bin/ash -c "jmusupplicant -k"
     fi
