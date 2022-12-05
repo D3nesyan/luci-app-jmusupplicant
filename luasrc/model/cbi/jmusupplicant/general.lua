@@ -19,16 +19,16 @@ end
 
 require("luci.sys")
 
-m = Map("mentohust", translate("MentoHUST"))
-m.description = translate("Configure MentoHUST 802.11x.")
+m = Map("jmusupplicant", translate("JMUSupplicant"))
+m.description = translate("Configure JMUSupplicant 802.11x.")
 
-s = m:section(TypedSection, "mentohust", translate("Status"))
+s = m:section(TypedSection, "jmusupplicant", translate("Status"))
 s.anonymous = true
 
-status = s:option(DummyValue,"_mentohust_status", "MentoHUST")
-status.value = "<span id=\"_mentohust_status\">%s</span>" %{is_running("mentohust")}
+status = s:option(DummyValue,"_jmusupplicant_status", "JMUSupplicant")
+status.value = "<span id=\"_jmusupplicant_status\">%s</span>" %{is_running("jmusupplicant")}
 status.rawhtml = true
-t = io.popen('uci get mentohust.@mentohust[0].pinghost')
+t = io.popen('uci get jmusupplicant.@jmusupplicant[0].pinghost')
 netstat = is_online(tostring(t:read("*line")))
 t:close()
 if netstat ~= "" then
@@ -37,7 +37,7 @@ netstatus.value = "<span id=\"_network_status\">%s</span>" %{netstat}
 netstatus.rawhtml = true
 end
 
-o = m:section(TypedSection, "mentohust", translate("Settings"))
+o = m:section(TypedSection, "jmusupplicant", translate("Settings"))
 o.addremove = false
 o.anonymous = true
 
@@ -97,7 +97,7 @@ startmode = o:taboption("advanced", ListValue, "startmode", translate("StartMode
 startmode.description = translate("Multicast address type when searching for servers")
 startmode:value(0, translate("Standard"))
 startmode:value(1, translate("Ruijie"))
-startmode:value(2, translate("Uses MentoHUST for Xaar certification"))
+startmode:value(2, translate("Uses JMUSupplicant for Xaar certification"))
 startmode.default = "0"
 
 dhcpmode = o:taboption("advanced", ListValue, "dhcpmode", translate("DhcpMode"))
@@ -118,7 +118,7 @@ version.default = "0.00"
 
 datafile = o:taboption("advanced", Value, "datafile", translate("DataFile"))
 datafile.description = translate("Authentication data file, if you need to verify the client, you need to set correctly")
-datafile.default = "/etc/mentohust/"
+datafile.default = "/etc/jmusupplicant/"
 
 dhcpscript = o:taboption("advanced", Value, "dhcpscript", translate("DhcpScript"))
 dhcpscript.description = translate("DHCP script")
@@ -126,7 +126,7 @@ dhcpscript.default = "udhcpc -i"
 
 local apply = luci.http.formvalue("cbi.apply")
 if apply then
-	io.popen("/etc/init.d/mentohust restart")
+	io.popen("/etc/init.d/jmusupplicant restart")
 end
 
 return m

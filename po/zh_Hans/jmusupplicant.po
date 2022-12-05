@@ -1,17 +1,17 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8\n"
 
-msgid "MentoHUST Settings"
-msgstr "MentoHUST 设置"
+msgid "JMUSupplicant Settings"
+msgstr "JMUSupplicant 设置"
 
-msgid "MentoHUST LOG"
-msgstr "MentoHUST 日志"
+msgid "JMUSupplicant LOG"
+msgstr "JMUSupplicant 日志"
 
-msgid "Log file:/tmp/mentohust.log"
-msgstr "日志文件：/tmp/mentohust.log"
+msgid "Log file:/tmp/jmusupplicant.log"
+msgstr "日志文件：/tmp/jmusupplicant.log"
 
-msgid "Configure MentoHUST 802.11x."
-msgstr "配置MentoHUST 802.11x验证。"
+msgid "Configure JMUSupplicant 802.11x."
+msgstr "配置JMUSupplicant 802.11x验证。"
 
 msgid "Normal Settings"
 msgstr "常规设置"
@@ -82,8 +82,8 @@ msgstr "标准"
 msgid "Ruijie"
 msgstr "锐捷"
 
-msgid "Uses MentoHUST for Xaar certification"
-msgstr "将MentoHUST用于赛尔认证"
+msgid "Uses JMUSupplicant for Xaar certification"
+msgstr "将JMUSupplicant用于赛尔认证"
 
 msgid "DhcpMode"
 msgstr "DHCP设置"

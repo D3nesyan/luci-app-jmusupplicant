@@ -1,7 +1,7 @@
 #!/bin/sh /etc/rc.common
 START=93
 
-run_mentohust()
+run_jmusupplicant()
 {
     local enable
     local username
@@ -56,30 +56,30 @@ run_mentohust()
         if [ "$restartwait" != "15" ] &&  [ "$restartwait" != "" ]; then cmd=$cmd" -r"$restartwait;fi
         if [ "$shownotify" != "5" ] &&  [ "$shownotify" != "" ]; then cmd=$cmd" -y"$shownotify;fi
         if [ "$version" != "0.00" ] &&  [ "$version" != "" ]; then cmd=$cmd" -v"$version;fi
-        if [ "$datafile" != "/etc/mentohust/" ] &&  [ "$datafile" != "" ]; then cmd=$cmd" -f"$datafile;fi
+        if [ "$datafile" != "/etc/jmusupplicant/" ] &&  [ "$datafile" != "" ]; then cmd=$cmd" -f"$datafile;fi
         if [ "$dhcpscript" != "udhcpc -i" ] &&  [ "$dhcpscript" != "" ]; then cmd=$cmd" -c'"$dhcpscript"'";fi
 
-        /bin/ash -c "mentohust -u$username -p$password -n$ifname -b3 -w $cmd"
+        /bin/ash -c "jmusupplicant -u$username -p$password -n$ifname -b3 -w $cmd"
     else
-        /bin/ash -c "mentohust -k"
+        /bin/ash -c "jmusupplicant -k"
     fi
 }
 
 start()
 {
-    config_load mentohust
-    config_foreach run_mentohust mentohust
+    config_load jmusupplicant
+    config_foreach run_jmusupplicant jmusupplicant
 }
 
 stop()
 {
-    killall mentohust
+    killall jmusupplicant
 }
 
 restart()
 {
-    mentohust -k
+    jmusupplicant -k
     sleep 1
-    config_load mentohust
-    config_foreach run_mentohust mentohust
+    config_load jmusupplicant
+    config_foreach run_jmusupplicant jmusupplicant
 }

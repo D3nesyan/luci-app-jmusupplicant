@@ -1,0 +1,11 @@
+{
+	"luci-app-jmusupplicant": {
+		"description": "Grant UCI access for luci-app-jmusupplicant",
+		"read": {
+			"uci": [ "jmusupplicant" ]
+		},
+		"write": {
+			"uci": [ "jmusupplicant" ]
+		}
+	}
+}

@@ -1,0 +1,11 @@
+#!/bin/sh
+
+uci -q batch <<-EOF >/dev/null
+	delete ucitrack.@jmusupplicant[-1]
+	add ucitrack jmusupplicant
+	set ucitrack.@jmusupplicant[-1].init=jmusupplicant
+	commit ucitrack
+EOF
+
+rm -rf /tmp/luci-*
+exit 0
