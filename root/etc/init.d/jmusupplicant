@@ -35,8 +35,8 @@ run_jmusupplicant()
         config_get netoperator $1 netoperator
         config_get_bool midnight $1 midnight
 
-        if [ "$ipaddr" != "" ]; then cmd=$cmd" --ip "$ipaddr;fi
-        if [ "$mask" != "" ]; then cmd=$cmd" --mask "$mask;fi
+        if [ "$ipaddr" != "0.0.0.0" ] && [ "$ipaddr" != "" ]; then cmd=$cmd" --ip "$ipaddr;fi
+        if [ "$mask" != "0.0.0.0" ] && [ "$mask" != "" ]; then cmd=$cmd" --mask "$mask;fi
 #        if [ "$pinghost" != "0.0.0.0" ] &&  [ "$pinghost" != "" ]; then cmd=$cmd" -o"$pinghost;fi
         if [ "$gateway" != "0.0.0.0" ] &&  [ "$gateway" != "" ]; then cmd=$cmd" -g"$gateway;fi
         if [ "$dns" != "0.0.0.0" ] &&  [ "$dns" != "" ]; then cmd=$cmd" -d"$dns;fi
