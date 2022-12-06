@@ -14,32 +14,32 @@ run_jmusupplicant()
     config_get ifname $1 ifname
 
     if [ $enable ] && [ $username ] && [ $password ] && [ $ifname ]; then
-        local pinghost
+#        local pinghost
         local ipaddr
         local mask
         local gateway
         local dns
-        local echointerval
-        local restartwait
+#        local echointerval
+#        local restartwait
         local netoperator
 
-        config_get pinghost $1 pinghost
+#        config_get pinghost $1 pinghost
         config_get startmode $1 startmode
         config_get ipaddr $1 ipaddr
         config_get mask $1 mask
         config_get gateway $1 gateway
         config_get dns $1 dns
-        config_get echointerval $1 echointerval
-        config_get restartwait $1 restartwait
+#        config_get echointerval $1 echointerval
+#        config_get restartwait $1 restartwait
         config_get netoperator $1 netoperator
 
         if [ "$ipaddr" != "" ]; then cmd=$cmd" --ip "$ipaddr;fi
         if [ "$mask" != "" ]; then cmd=$cmd" --mask "$mask;fi
-        if [ "$pinghost" != "0.0.0.0" ] &&  [ "$pinghost" != "" ]; then cmd=$cmd" -o"$pinghost;fi
+#        if [ "$pinghost" != "0.0.0.0" ] &&  [ "$pinghost" != "" ]; then cmd=$cmd" -o"$pinghost;fi
         if [ "$gateway" != "0.0.0.0" ] &&  [ "$gateway" != "" ]; then cmd=$cmd" -g"$gateway;fi
         if [ "$dns" != "0.0.0.0" ] &&  [ "$dns" != "" ]; then cmd=$cmd" -d"$dns;fi
-        if [ "$echointerval" != "30" ] &&  [ "$echointerval" != "" ]; then cmd=$cmd" -e"$echointerval;fi
-        if [ "$restartwait" != "15" ] &&  [ "$restartwait" != "" ]; then cmd=$cmd" -r"$restartwait;fi
+#        if [ "$echointerval" != "30" ] &&  [ "$echointerval" != "" ]; then cmd=$cmd" -e"$echointerval;fi
+#        if [ "$restartwait" != "15" ] &&  [ "$restartwait" != "" ]; then cmd=$cmd" -r"$restartwait;fi
         if [ "$netoperator" != "0" ] && [ "$netoperator" != "" ]; then cmd=$cmd" -s"$netoperator;fi
 
         /bin/ash -c "jmusupplicant -u$username -p$password --interface_card $ifname -b $cmd"
