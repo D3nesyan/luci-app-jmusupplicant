@@ -6,11 +6,11 @@ local function is_running(name)
 	end
 end
 
-local function is_online(ipaddr)
-	if ipaddr == "0.0.0.0" then 
+local function is_online(pinghost)
+	if pinghost == "0.0.0.0" then 
 		return translate("Pinghost not set")
 	end
-	if luci.sys.call("ping -c1 -w1 %s >/dev/null 2>&1" %{ipaddr}) == 0 then
+	if luci.sys.call("ping -c1 -w1 %s >/dev/null 2>&1" %{pinghost}) == 0 then
 		return translate("ONLINE")
 	else
 		return translate("NOT ONLINE")
@@ -75,9 +75,9 @@ ipaddr = o:taboption("base", Value, "ipaddr", translate("IP Address"))
 ipaddr.description = translate("Your IPv4 Address. (DHCP users can set to 0.0.0.0)")
 ipaddr.default = "0.0.0.0"
 
---pinghost = o:taboption("base", Value, "pinghost", translate("PingHost"))
---pinghost.description = translate("Ping host for drop detection, 0.0.0.0 to turn off this feature")
---pinghost.default = "0.0.0.0"
+pinghost = o:taboption("base", Value, "pinghost", translate("PingHost"))
+pinghost.description = translate("Ping host for drop detection, 0.0.0.0 to turn off this feature")
+pinghost.default = "0.0.0.0"
 
 mask = o:taboption("advanced", Value, "mask", translate("NetMask"))
 mask.description = translate("NetMask, it doesn't matter")
