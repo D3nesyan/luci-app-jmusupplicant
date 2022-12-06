@@ -100,6 +100,15 @@ msgstr "中国电信"
 msgid "Settings"
 msgstr "设置"
 
+msgid "Midnight Mode"
+msgstr "午夜模式"
+
+msgid "Enable"
+msgstr "开启"
+
+msgid "Disable"
+msgstr "关闭"
+
 msgid "Network Status"
 msgstr "网络状态"
 

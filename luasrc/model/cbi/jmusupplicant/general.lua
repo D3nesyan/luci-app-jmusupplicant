@@ -97,6 +97,12 @@ netoperator:value(2, translate("China Mobile"))
 netoperator:value(3, translate("China Telecom"))
 netoperator.default = "0"
 
+midnight = o:taboption("advanced", ListValue, "midnight", translate("MidNight"))
+midnight.description = translate("Midnight Mode")
+midnight:value(0, translate("Enable"))
+midnight:value(1, translate("Disable"))
+midnight.default = "0"
+
 local apply = luci.http.formvalue("cbi.apply")
 if apply then
 	io.popen("/etc/init.d/jmusupplicant restart")
