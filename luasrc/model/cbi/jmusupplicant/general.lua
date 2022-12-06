@@ -61,9 +61,9 @@ for k, v in ipairs(luci.sys.net.devices()) do
     end
 end
 
-pinghost = o:taboption("base", Value, "pinghost", translate("PingHost"))
-pinghost.description = translate("Ping host for drop detection, 0.0.0.0 to turn off this feature")
-pinghost.default = "0.0.0.0"
+--pinghost = o:taboption("base", Value, "pinghost", translate("PingHost"))
+--pinghost.description = translate("Ping host for drop detection, 0.0.0.0 to turn off this feature")
+--pinghost.default = "0.0.0.0"
 
 ipaddr = o:taboption("advanced", Value, "ipaddr", translate("IP Address"))
 ipaddr.description = translate("Your IPv4 Address. (DHCP users can set to 0.0.0.0)")
@@ -81,13 +81,13 @@ dnsserver = o:taboption("advanced", Value, "dns", translate("DNS server"))
 dnsserver.description = translate("DNS server, it doesn't matter")
 dnsserver.default = "0.0.0.0"
 
-echointerval = o:taboption("advanced", Value, "echointerval", translate("EchoInterval"))
-echointerval.description = translate("Interval for sending Echo packets (seconds)")
-echointerval.default = "30"
+--echointerval = o:taboption("advanced", Value, "echointerval", translate("EchoInterval"))
+--echointerval.description = translate("Interval for sending Echo packets (seconds)")
+--echointerval.default = "30"
 
-restartwait = o:taboption("advanced", Value, "restartwait", translate("RestartWait"))
-restartwait.description = translate("Failed Wait (seconds) Wait for seconds after authentication failed or restart authentication after server request")
-restartwait.default = "15"
+--restartwait = o:taboption("advanced", Value, "restartwait", translate("RestartWait"))
+--restartwait.description = translate("Failed Wait (seconds) Wait for seconds after authentication failed or restart authentication after server request")
+--restartwait.default = "15"
 
 netoperator = o:taboption("advanced", ListValue, "netoperator", translate("NetOperator"))
 netoperator.description = translate("Network Operator")
