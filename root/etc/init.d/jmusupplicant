@@ -33,7 +33,7 @@ run_jmusupplicant()
 #        config_get echointerval $1 echointerval
 #        config_get restartwait $1 restartwait
         config_get netoperator $1 netoperator
-        config_get midnight $1 midnight
+        config_get_bool midnight $1 midnight
 
         if [ "$ipaddr" != "" ]; then cmd=$cmd" --ip "$ipaddr;fi
         if [ "$mask" != "" ]; then cmd=$cmd" --mask "$mask;fi
@@ -43,7 +43,7 @@ run_jmusupplicant()
 #        if [ "$echointerval" != "30" ] &&  [ "$echointerval" != "" ]; then cmd=$cmd" -e"$echointerval;fi
 #        if [ "$restartwait" != "15" ] &&  [ "$restartwait" != "" ]; then cmd=$cmd" -r"$restartwait;fi
         if [ "$netoperator" != "0" ] && [ "$netoperator" != "" ]; then cmd=$cmd" -s"$netoperator;fi
-        if [ "$midnight" != "0" ] && [ "$midnight" != "" ]; then cmd=$cmd" -n";fi
+        if [ $midnight ]; then cmd=$cmd" -n";fi
 
         /bin/ash -c "jmusupplicant -u$username -p$password --interface_card $ifname -b $cmd"
     else
