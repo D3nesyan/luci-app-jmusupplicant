@@ -61,13 +61,27 @@ for k, v in ipairs(luci.sys.net.devices()) do
     end
 end
 
+netoperator = o:taboption("base", ListValue, "netoperator", translate("NetOperator"))
+netoperator.description = translate("Network Operator")
+netoperator:value(0, translate("Education Network"))
+netoperator:value(1, translate("China Unicom"))
+netoperator:value(2, translate("China Mobile"))
+netoperator:value(3, translate("China Telecom"))
+netoperator.default = "0"
+
+midnight = o:taboption("base", ListValue, "midnight", translate("MidNight"))
+midnight.description = translate("Midnight Mode")
+midnight:value(0, translate("Enable"))
+midnight:value(1, translate("Disable"))
+midnight.default = "0"
+
+ipaddr = o:taboption("base", Value, "ipaddr", translate("IP Address"))
+ipaddr.description = translate("Your IPv4 Address. (DHCP users can set to 0.0.0.0)")
+ipaddr.default = "0.0.0.0"
+
 --pinghost = o:taboption("base", Value, "pinghost", translate("PingHost"))
 --pinghost.description = translate("Ping host for drop detection, 0.0.0.0 to turn off this feature")
 --pinghost.default = "0.0.0.0"
-
-ipaddr = o:taboption("advanced", Value, "ipaddr", translate("IP Address"))
-ipaddr.description = translate("Your IPv4 Address. (DHCP users can set to 0.0.0.0)")
-ipaddr.default = "0.0.0.0"
 
 mask = o:taboption("advanced", Value, "mask", translate("NetMask"))
 mask.description = translate("NetMask, it doesn't matter")
@@ -88,20 +102,6 @@ dnsserver.default = "0.0.0.0"
 --restartwait = o:taboption("advanced", Value, "restartwait", translate("RestartWait"))
 --restartwait.description = translate("Failed Wait (seconds) Wait for seconds after authentication failed or restart authentication after server request")
 --restartwait.default = "15"
-
-netoperator = o:taboption("advanced", ListValue, "netoperator", translate("NetOperator"))
-netoperator.description = translate("Network Operator")
-netoperator:value(0, translate("Education Network"))
-netoperator:value(1, translate("China Unicom"))
-netoperator:value(2, translate("China Mobile"))
-netoperator:value(3, translate("China Telecom"))
-netoperator.default = "0"
-
-midnight = o:taboption("advanced", ListValue, "midnight", translate("MidNight"))
-midnight.description = translate("Midnight Mode")
-midnight:value(0, translate("Enable"))
-midnight:value(1, translate("Disable"))
-midnight.default = "0"
 
 local apply = luci.http.formvalue("cbi.apply")
 if apply then
