@@ -22,7 +22,6 @@ run_jmusupplicant()
         local echointerval
         local restartwait
         local netoperator
-        local datafile
 
         config_get pinghost $1 pinghost
         config_get startmode $1 startmode
@@ -33,7 +32,6 @@ run_jmusupplicant()
         config_get echointerval $1 echointerval
         config_get restartwait $1 restartwait
         config_get netoperator $1 netoperator
-        config_get datafile $1 datafile
 
         if [ "$ipaddr" != "" ]; then cmd=$cmd" --ip "$ipaddr;fi
         if [ "$mask" != "" ]; then cmd=$cmd" --mask "$mask;fi
@@ -43,7 +41,6 @@ run_jmusupplicant()
         if [ "$echointerval" != "30" ] &&  [ "$echointerval" != "" ]; then cmd=$cmd" -e"$echointerval;fi
         if [ "$restartwait" != "15" ] &&  [ "$restartwait" != "" ]; then cmd=$cmd" -r"$restartwait;fi
         if [ "$netoperator" != "0" ] && [ "$netoperator" != "" ]; then cmd=$cmd" -s"$netoperator;fi
-        if [ "$datafile" != "/etc/jmusupplicant/" ] &&  [ "$datafile" != "" ]; then cmd=$cmd" -f"$datafile;fi
 
         /bin/ash -c "jmusupplicant -u$username -p$password --interface_card $ifname -b $cmd"
     else

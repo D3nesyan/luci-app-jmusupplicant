@@ -97,10 +97,6 @@ netoperator:value(2, translate("China Mobile"))
 netoperator:value(3, translate("China Telecom"))
 netoperator.default = "0"
 
-datafile = o:taboption("advanced", Value, "datafile", translate("DataFile"))
-datafile.description = translate("Authentication data file, if you need to verify the client, you need to set correctly")
-datafile.default = "/etc/jmusupplicant/"
-
 local apply = luci.http.formvalue("cbi.apply")
 if apply then
 	io.popen("/etc/init.d/jmusupplicant restart")
