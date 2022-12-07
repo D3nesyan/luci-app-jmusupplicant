@@ -9,11 +9,11 @@ function index()
 		return
 	end
 
-	local page = entry({"admin", "services", "jmusupplicant"}, alias("admin", "services", "jmusupplicant", "general"), _("JMUSupplicant"))
+	local page = entry({"admin", "services", "jmusupplicant"}, alias("admin", "services", "jmusupplicant", "general"), _("集美大学校园网锐捷认证"))
 	page.order = 10
 	page.dependent = true
 	page.acl_depends = { "luci-app-jmusupplicant" }
 
-	entry({"admin", "services", "jmusupplicant", "general"}, cbi("jmusupplicant/general"), _("JMUSupplicant Settings"), 10).leaf = true
-	entry({"admin", "services", "jmusupplicant", "log"}, cbi("jmusupplicant/log"), _("JMUSupplicant LOG"), 20).leaf = true
+	entry({"admin", "services", "jmusupplicant", "general"}, cbi("jmusupplicant/general"), _("基本设置"), 10).leaf = true
+	entry({"admin", "services", "jmusupplicant", "log"}, cbi("jmusupplicant/log"), _("日志信息"), 20).leaf = true
 end
