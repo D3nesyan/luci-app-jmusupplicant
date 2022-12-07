@@ -1,8 +1,8 @@
 local fs = require "nixio.fs"
 
 local f = SimpleForm("jmusupplicant",
-	translate("JMUSupplicant LOG"),
-	translate("Log file:/tmp/jmusupplicant.log"))
+	translate("运行日志"),
+	translate("日志文件路径: /tmp/jmusupplicant.log"))
 
 local o = f:field(Value, "jmusupplicant_log")
 
@@ -17,7 +17,7 @@ function o.write(self, section, value)
 	require("luci.sys").call('cat /dev/null > /tmp/jmusupplicant.log 2>/dev/null')
 end
 
-f.submit = translate("Clear log")
+f.submit = translate("清除日志")
 f.reset = false
 
 return f
