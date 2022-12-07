@@ -91,10 +91,6 @@ dnsserver = o:taboption("advanced", Value, "dns", translate("DNS server"))
 dnsserver.description = translate("DNS server, it doesn't matter")
 dnsserver.default = "0.0.0.0"
 
---echointerval = o:taboption("advanced", Value, "echointerval", translate("EchoInterval"))
---echointerval.description = translate("Interval for sending Echo packets (seconds)")
---echointerval.default = "30"
-
 --restartwait = o:taboption("advanced", Value, "restartwait", translate("RestartWait"))
 --restartwait.description = translate("Failed Wait (seconds) Wait for seconds after authentication failed or restart authentication after server request")
 --restartwait.default = "15"
