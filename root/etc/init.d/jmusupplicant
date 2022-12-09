@@ -28,7 +28,6 @@ run_jmusupplicant()
         local mask
         local gateway
         local dns
-#        local restartwait
         local midnight
         local cronset
 
@@ -37,7 +36,6 @@ run_jmusupplicant()
         config_get mask $1 mask
         config_get gateway $1 gateway
         config_get dns $1 dns
-#        config_get restartwait $1 restartwait
         config_get_bool midnight $1 midnight
         config_get_bool cronset $1 cronset
 
@@ -52,7 +50,6 @@ run_jmusupplicant()
 #        if [ "$pinghost" != "0.0.0.0" ] &&  [ "$pinghost" != "" ]; then cmd=$cmd" -o"$pinghost;fi
         if [ "$gateway" != "0.0.0.0" ] &&  [ "$gateway" != "" ]; then cmd=$cmd" -g"$gateway;fi
         if [ "$dns" != "0.0.0.0" ] &&  [ "$dns" != "" ]; then cmd=$cmd" -d"$dns;fi
-#        if [ "$restartwait" != "15" ] &&  [ "$restartwait" != "" ]; then cmd=$cmd" -r"$restartwait;fi
         if [ $midnight ]; then cmd=$cmd" -n";fi
 
         echo "AUTH START" >> $LOG_FILE
