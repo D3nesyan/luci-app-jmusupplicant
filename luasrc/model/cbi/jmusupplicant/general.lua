@@ -75,6 +75,8 @@ ipaddr = o:taboption("base", Value, "ipaddr", translate("IP 地址"))
 ipaddr.description = translate("指定 IPV4 地址，可填入无断网办公区域的 IP 地址")
 ipaddr.default = "0.0.0.0"
 
+cronset = o:taboption("basic", Flag, "cronset", translate("清晨自动重连"), translate("每天 6:10 A.M 进行重连 "))
+
 pinghost = o:taboption("base", Value, "pinghost", translate("Ping 主机"))
 pinghost.description = translate("用于检测网络状态的 Ping 主机地址，可设置成 0.0.0.0 以关闭该功能")
 pinghost.default = "0.0.0.0"
