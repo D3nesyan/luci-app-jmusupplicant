@@ -57,7 +57,11 @@ run_jmusupplicant()
 
         echo "AUTH START" >> $LOG_FILE
 
+        /bin/ash -c "jmusupplicant -k"
+
         /bin/ash -c "jmusupplicant -u$username -p$password -b -s$netoperator --interface_card $ifname $cmd"
+
+        echo "AUTH END" >> $LOG_FILE
 
         crontab_file="/etc/crontabs/root"
 	    touch $crontab_file
