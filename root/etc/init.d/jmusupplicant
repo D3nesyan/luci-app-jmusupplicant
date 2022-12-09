@@ -1,6 +1,8 @@
 #!/bin/sh /etc/rc.common
 START=93
 
+LOG_FILE=/tmp/jmusupplicant.log
+
 run_jmusupplicant()
 {
     local enable
@@ -15,6 +17,11 @@ run_jmusupplicant()
     config_get netoperator $1 netoperator
     config_get ifname $1 ifname
 
+    echo "Enable        : $enable" > $LOG_FILE
+    echo "Username      : $username" >> $LOG_FILE
+	echo "Services      : $netoperator" >> $LOG_FILE
+    echo "Interface Card: $ifname" >> $LOG_FILE
+
     if [ $enable ] && [ $username ] && [ $password ] && [ $ifname ] && [ $netoperator ]; then
 #        local pinghost
         local ipaddr
@@ -25,7 +32,6 @@ run_jmusupplicant()
         local midnight
 
 #        config_get pinghost $1 pinghost
-        config_get startmode $1 startmode
         config_get ipaddr $1 ipaddr
         config_get mask $1 mask
         config_get gateway $1 gateway
@@ -33,6 +39,12 @@ run_jmusupplicant()
 #        config_get restartwait $1 restartwait
         config_get_bool midnight $1 midnight
 
+        echo "IPaddr        : $ipaddr" >> $LOG_FILE
+        echo "Mask          : $mask" >> $LOG_FILE
+        echo "Gateway       : $gateway" >> $LOG_FILE
+        echo "DNS Server    : $dns" >> $LOG_FILE
+        echo "Midnight Mode : $midnight" >> $LOG_FILE
+        
         if [ "$ipaddr" != "0.0.0.0" ] && [ "$ipaddr" != "" ]; then cmd=$cmd" --ip "$ipaddr;fi
         if [ "$mask" != "0.0.0.0" ] && [ "$mask" != "" ]; then cmd=$cmd" --mask "$mask;fi
 #        if [ "$pinghost" != "0.0.0.0" ] &&  [ "$pinghost" != "" ]; then cmd=$cmd" -o"$pinghost;fi
@@ -40,6 +52,8 @@ run_jmusupplicant()
         if [ "$dns" != "0.0.0.0" ] &&  [ "$dns" != "" ]; then cmd=$cmd" -d"$dns;fi
 #        if [ "$restartwait" != "15" ] &&  [ "$restartwait" != "" ]; then cmd=$cmd" -r"$restartwait;fi
         if [ $midnight ]; then cmd=$cmd" -n";fi
+
+        echo "AUTH START" >> $LOG_FILE
 
         /bin/ash -c "jmusupplicant -u$username -p$password -b -s$netoperator --interface_card $ifname $cmd"
     else
