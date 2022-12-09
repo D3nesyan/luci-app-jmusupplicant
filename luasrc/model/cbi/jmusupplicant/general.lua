@@ -93,10 +93,6 @@ dnsserver = o:taboption("advanced", Value, "dns", translate("DNS 服务器"))
 dnsserver.description = translate("指定 DNS 服务器地址，可设置成 0.0.0.0 以关闭该功能")
 dnsserver.default = "0.0.0.0"
 
---restartwait = o:taboption("advanced", Value, "restartwait", translate("RestartWait"))
---restartwait.description = translate("Failed Wait (seconds) Wait for seconds after authentication failed or restart authentication after server request")
---restartwait.default = "15"
-
 local apply = luci.http.formvalue("cbi.apply")
 if apply then
 	io.popen("/etc/init.d/jmusupplicant restart")
