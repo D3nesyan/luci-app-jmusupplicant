@@ -1,7 +1,7 @@
 #!/bin/sh /etc/rc.common
 START=93
 
-LOG_FILE=/tmp/jmusupplicant.log
+LOG_FILE="/tmp/jmusupplicant.log"
 
 run_jmusupplicant()
 {
@@ -30,6 +30,7 @@ run_jmusupplicant()
         local dns
 #        local restartwait
         local midnight
+        local cronset
 
 #        config_get pinghost $1 pinghost
         config_get ipaddr $1 ipaddr
@@ -38,6 +39,7 @@ run_jmusupplicant()
         config_get dns $1 dns
 #        config_get restartwait $1 restartwait
         config_get_bool midnight $1 midnight
+        config_get_bool cronset $1 cronset
 
         echo "IPaddr        : $ipaddr" >> $LOG_FILE
         echo "Mask          : $mask" >> $LOG_FILE
@@ -56,6 +58,19 @@ run_jmusupplicant()
         echo "AUTH START" >> $LOG_FILE
 
         /bin/ash -c "jmusupplicant -u$username -p$password -b -s$netoperator --interface_card $ifname $cmd"
+
+        crontab_file="/etc/crontabs/root"
+	    touch $crontab_file
+	    if [ $enable ] && [ $cronset ]; then
+		    echo "Cronset: Configure"
+            sed -i '/jmusupplicant/d' $crontab_file
+		    echo "10 6 * * * /etc/init.d/jmusupplicant restart" >> $crontab_file
+		    crontab $crontab_file
+	    else
+            echo "Cronset: Removing"
+		    sed -i '/jmusupplicant/d' $crontab_file
+		    crontab $crontab_file
+	    fi
     else
         /bin/ash -c "jmusupplicant -k"
     fi
