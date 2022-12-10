@@ -5,8 +5,8 @@ LUCI_DEPENDS:=+jmusupplicant
 LUCI_PKGARCH:=all
 
 PKG_NAME:=luci-app-jmusupplicant
-PKG_VERSION:=1.2.0
-PKG_RELEASE:=5
+PKG_VERSION:=2.0
+PKG_RELEASE:=6
 
 include $(TOPDIR)/feeds/luci/luci.mk
 
