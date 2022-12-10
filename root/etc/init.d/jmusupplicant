@@ -17,6 +17,10 @@ run_jmusupplicant()
     config_get netoperator $1 netoperator
     config_get ifname $1 ifname
 
+    if [ ! -f "$LOG_FILE" ]; then
+        touch "$LOG_FILE"
+    fi
+    
     echo "Enable        : $enable" > $LOG_FILE
     echo "Username      : $username" >> $LOG_FILE
 	echo "Services      : $netoperator" >> $LOG_FILE
@@ -45,11 +49,15 @@ run_jmusupplicant()
         echo "DNS Server    : $dns" >> $LOG_FILE
         echo "Midnight Mode : $midnight" >> $LOG_FILE
         
-        if [ "$ipaddr" != "0.0.0.0" ] && [ "$ipaddr" != "" ]; then cmd=$cmd" --ip "$ipaddr;fi
-        if [ "$mask" != "0.0.0.0" ] && [ "$mask" != "" ]; then cmd=$cmd" --mask "$mask;fi
-        if [ "$gateway" != "0.0.0.0" ] &&  [ "$gateway" != "" ]; then cmd=$cmd" -g"$gateway;fi
-        if [ "$dns" != "0.0.0.0" ] &&  [ "$dns" != "" ]; then cmd=$cmd" -d"$dns;fi
-        if [ $midnight ]; then cmd=$cmd" -n";fi
+        if [ $midnight ]; then
+            cmd="$cmd -n"
+            if [ "$ipaddr" != "0.0.0.0" ] && [ "$ipaddr" != "" ]; then
+                cmd="$cmd --ip $ipaddr"
+            fi
+        fi
+        if [ "$mask" != "0.0.0.0" ] && [ "$mask" != "" ]; then cmd="$cmd --mask $mask";fi
+        if [ "$gateway" != "0.0.0.0" ] && [ "$gateway" != "" ]; then cmd="$cmd -g$gateway";fi
+        if [ "$dns" != "0.0.0.0" ] && [ "$dns" != "" ]; then cmd="$cmd -d$dns";fi
 
         echo "AUTH START" >> $LOG_FILE
 
@@ -64,7 +72,7 @@ run_jmusupplicant()
                 ping -c1 -w1 $pinghost >/dev/null 2>&1
                 if [ $? -ne 0 ]; then
                     /bin/ash -c "jmusupplicant -k"
-                    while (1); do
+                    while true; do
                         /bin/ash -c "jmusupplicant -u$username -p$password -b -s$netoperator --interface_card $ifname $cmd"
                         if [ $? -eq 0 ]; then
                             break
@@ -76,7 +84,7 @@ run_jmusupplicant()
             done
         else
             /bin/ash -c "jmusupplicant -k"
-            while (1); do
+            while true; do
                 /bin/ash -c "jmusupplicant -u$username -p$password -b -s$netoperator --interface_card $ifname $cmd"
                 if [ $? -eq 0 ]; then
                     break
@@ -87,7 +95,9 @@ run_jmusupplicant()
         echo "AUTH END" >> $LOG_FILE
 
         crontab_file="/etc/crontabs/root"
-	    touch $crontab_file
+        if [ ! -f "$crontab_file" ]; then
+	        touch "$crontab_file"
+        fi
 	    if [ $enable ] && [ $cronset ]; then
 		    echo "Cronset: Configure"
             sed -i '/jmusupplicant/d' $crontab_file
