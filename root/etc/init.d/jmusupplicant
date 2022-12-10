@@ -21,9 +21,9 @@ run_jmusupplicant()
         touch "$LOG_FILE"
     fi
     
-    echo "Enable        : $enable" > $LOG_FILE
-    echo "Username      : $username" >> $LOG_FILE
-	echo "Services      : $netoperator" >> $LOG_FILE
+    echo "Enable: $enable" > $LOG_FILE
+    echo "Username: $username" >> $LOG_FILE
+	echo "Services: $netoperator" >> $LOG_FILE
     echo "Interface Card: $ifname" >> $LOG_FILE
 
     if [ $enable ] && [ $username ] && [ $password ] && [ $ifname ] && [ $netoperator ]; then
@@ -43,11 +43,11 @@ run_jmusupplicant()
         config_get_bool midnight $1 midnight
         config_get_bool cronset $1 cronset
 
-        echo "IPaddr        : $ipaddr" >> $LOG_FILE
-        echo "Mask          : $mask" >> $LOG_FILE
-        echo "Gateway       : $gateway" >> $LOG_FILE
-        echo "DNS Server    : $dns" >> $LOG_FILE
-        echo "Midnight Mode : $midnight" >> $LOG_FILE
+        echo "IPaddr: $ipaddr" >> $LOG_FILE
+        echo "Mask: $mask" >> $LOG_FILE
+        echo "Gateway: $gateway" >> $LOG_FILE
+        echo "DNS Server: $dns" >> $LOG_FILE
+        echo "Midnight Mode: $midnight" >> $LOG_FILE
         
         if [ $midnight ]; then
             cmd="$cmd -n"
