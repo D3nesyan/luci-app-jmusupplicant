@@ -73,7 +73,7 @@ run_jmusupplicant()
                 if [ $? -ne 0 ]; then
                     /bin/ash -c "jmusupplicant -k"
                     while true; do
-                        /bin/ash -c "jmusupplicant -u$username -p$password -b -s$netoperator --interface_card $ifname $cmd"
+                        /bin/ash -c "jmusupplicant -u$username -p$password -b -s0 --interface_card $ifname $cmd"
                         if [ $? -eq 0 ]; then
                             break
                         fi
