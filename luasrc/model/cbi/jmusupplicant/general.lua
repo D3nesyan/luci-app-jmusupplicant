@@ -20,7 +20,7 @@ end
 require("luci.sys")
 
 m = Map("jmusupplicant", translate("集美大学校园网锐捷认证"))
-m.description = translate("集美大学校园网认证（JMUSupplicant）设置")
+m.description = translate("集美大学校园网认证 (JMUSupplicant) 设置")
 
 s = m:section(TypedSection, "jmusupplicant", translate("状态"))
 s.anonymous = true
