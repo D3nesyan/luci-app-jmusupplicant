@@ -67,6 +67,7 @@ run_jmusupplicant()
             start_time=$(date +%s)
             end_time=$((start_time + duration))
             current_time=$start_time
+            flag=0
 
             while [ $current_time -lt $end_time ]; do
                 ping -c1 -w1 $pinghost >/dev/null 2>&1
@@ -76,6 +77,7 @@ run_jmusupplicant()
                         echo "Authenticating" >> $LOG_FILE
                         /bin/ash -c "jmusupplicant -u$username -p$password -b -s0 --interface_card $ifname $cmd"
                         if [ $? -eq 0 ]; then
+                            flag=1
                             echo "Authentication Success" >> $LOG_FILE
                             break
                         else
@@ -83,6 +85,9 @@ run_jmusupplicant()
                             sleep 5
                         fi
                     done
+                fi
+                if [ $flag -eq 1 ]; then
+                    break
                 fi
                 sleep $interval
                 current_time=$(date +%s)
