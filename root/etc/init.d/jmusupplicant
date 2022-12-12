@@ -3,148 +3,144 @@ START=93
 
 LOG_FILE="/tmp/jmusupplicant.log"
 
-run_jmusupplicant()
-{
-    local enable
-    local username
-    local password
-    local ifname
-    local netoperator
-    local cmd
-    config_get_bool enable $1 enable
-    config_get username $1 username
-    config_get password $1 password
-    config_get netoperator $1 netoperator
-    config_get ifname $1 ifname
+run_jmusupplicant() {
+	local enable
+	local username
+	local password
+	local ifname
+	local netoperator
+	local cmd
+	config_get_bool enable $1 enable
+	config_get username $1 username
+	config_get password $1 password
+	config_get netoperator $1 netoperator
+	config_get ifname $1 ifname
 
-    if [ ! -f "$LOG_FILE" ]; then
-        touch "$LOG_FILE"
-    fi
-    
-    echo "Enable: $enable" > $LOG_FILE
-    echo "Username: $username" >> $LOG_FILE
-	echo "Services: $netoperator" >> $LOG_FILE
-    echo "Interface Card: $ifname" >> $LOG_FILE
+	if [ ! -f "$LOG_FILE" ]; then
+		touch "$LOG_FILE"
+	fi
 
-    if [ $enable ] && [ $username ] && [ $password ] && [ $ifname ] && [ $netoperator ]; then
-        local pinghost
-        local ipaddr
-        local mask
-        local gateway
-        local dns
-        local midnight
-        local cronset
+	echo "Enable: $enable" >$LOG_FILE
+	echo "Username: $username" >>$LOG_FILE
+	echo "Services: $netoperator" >>$LOG_FILE
+	echo "Interface Card: $ifname" >>$LOG_FILE
 
-        config_get pinghost $1 pinghost
-        config_get ipaddr $1 ipaddr
-        config_get mask $1 mask
-        config_get gateway $1 gateway
-        config_get dns $1 dns
-        config_get_bool midnight $1 midnight
-        config_get_bool cronset $1 cronset
+	if [ $enable ] && [ $username ] && [ $password ] && [ $ifname ] && [ $netoperator ]; then
+		local pinghost
+		local ipaddr
+		local mask
+		local gateway
+		local dns
+		local midnight
+		local cronset
 
-        echo "IPaddr: $ipaddr" >> $LOG_FILE
-        echo "Mask: $mask" >> $LOG_FILE
-        echo "Gateway: $gateway" >> $LOG_FILE
-        echo "DNS Server: $dns" >> $LOG_FILE
-        echo "Midnight Mode: $midnight" >> $LOG_FILE
-        
-        if [ $midnight ]; then
-            cmd="$cmd -n"
-            if [ "$ipaddr" != "0.0.0.0" ] && [ "$ipaddr" != "" ]; then
-                cmd="$cmd --ip $ipaddr"
-            fi
-        fi
-        if [ "$mask" != "0.0.0.0" ] && [ "$mask" != "" ]; then cmd="$cmd --mask $mask";fi
-        if [ "$gateway" != "0.0.0.0" ] && [ "$gateway" != "" ]; then cmd="$cmd -g$gateway";fi
-        if [ "$dns" != "0.0.0.0" ] && [ "$dns" != "" ]; then cmd="$cmd -d$dns";fi
+		config_get pinghost $1 pinghost
+		config_get ipaddr $1 ipaddr
+		config_get mask $1 mask
+		config_get gateway $1 gateway
+		config_get dns $1 dns
+		config_get_bool midnight $1 midnight
+		config_get_bool cronset $1 cronset
 
-        echo "AUTH START" >> $LOG_FILE
+		echo "IPaddr: $ipaddr" >>$LOG_FILE
+		echo "Mask: $mask" >>$LOG_FILE
+		echo "Gateway: $gateway" >>$LOG_FILE
+		echo "DNS Server: $dns" >>$LOG_FILE
+		echo "Midnight Mode: $midnight" >>$LOG_FILE
 
-        if [ $midnight ]; then
-            interval=15
-            duration=360
-            start_time=$(date +%s)
-            end_time=$((start_time + duration))
-            current_time=$start_time
-            flag=0
+		if [ $midnight ]; then
+			cmd="$cmd -n"
+			if [ "$ipaddr" != "0.0.0.0" ] && [ "$ipaddr" != "" ]; then
+				cmd="$cmd --ip $ipaddr"
+			fi
+		fi
+		if [ "$mask" != "0.0.0.0" ] && [ "$mask" != "" ]; then cmd="$cmd --mask $mask"; fi
+		if [ "$gateway" != "0.0.0.0" ] && [ "$gateway" != "" ]; then cmd="$cmd -g$gateway"; fi
+		if [ "$dns" != "0.0.0.0" ] && [ "$dns" != "" ]; then cmd="$cmd -d$dns"; fi
 
-            while [ $current_time -lt $end_time ]; do
-                ping -c1 -w1 $pinghost >/dev/null 2>&1
-                if [ $? -ne 0 ]; then
-                    while true; do
-                        echo "Authenticating" >> $LOG_FILE
-                        /bin/ash -c "jmusupplicant -k"
-                        /bin/ash -c "jmusupplicant -u$username -p$password -b -s0 --interface_card $ifname $cmd"
-                        if [ $? -eq 0 ]; then
-                            flag=1
-                            echo "Authentication Success" >> $LOG_FILE
-                            break
-                        else
-                            echo "Authentication failed, retrying..." >> $LOG_FILE
-                            sleep 5
-                        fi
-                    done
-                fi
-                if [ $flag -eq 1 ]; then
-                    break
-                fi
-                sleep $interval
-                current_time=$(date +%s)
-            done
-        else
-            while true; do
-                echo "Authenticating" >> $LOG_FILE
-                /bin/ash -c "jmusupplicant -k"
-                /bin/ash -c "jmusupplicant -u$username -p$password -b -s$netoperator --interface_card $ifname $cmd"
-                if [ $? -eq 0 ]; then
-                    echo "Authentication Success" >> $LOG_FILE
-                    break
-                else
-                    echo "Authentication failed, retrying..." >> $LOG_FILE
-                    sleep 5
-                fi
-            done
-        fi
+		echo "AUTH START" >>$LOG_FILE
 
-        echo "AUTH END" >> $LOG_FILE
+		if [ $midnight ]; then
+			interval=15
+			duration=360
+			start_time=$(date +%s)
+			end_time=$((start_time + duration))
+			current_time=$start_time
+			flag=0
 
-        crontab_file="/etc/crontabs/root"
-        if [ ! -f "$crontab_file" ]; then
-	        touch "$crontab_file"
-        fi
-	    if [ $enable ] && [ $cronset ]; then
-		    echo "Cronset: Configure" >> $LOG_FILE
-            sed -i '/jmusupplicant/d' $crontab_file
-		    echo "10 6 * * * sed -i '/midnight/d' '/etc/config/jmusupplicant'; /etc/init.d/jmusupplicant restart" >> $crontab_file
-            echo "0 23 * * 0-4 echo option midnight \\'1\\' >> '/etc/config/jmusupplicant'; /etc/init.d/jmusupplicant restart" >> $crontab_file
-            echo "59 23 * * 5,6 echo option midnight \\'1\\' >> '/etc/config/jmusupplicant'; /etc/init.d/jmusupplicant restart" >> $crontab_file
-		    crontab $crontab_file
-	    else
-            echo "Cronset: Removing" >> $LOG_FILE
-		    sed -i '/jmusupplicant/d' $crontab_file
-		    crontab $crontab_file
-	    fi
-    else
-        /bin/ash -c "jmusupplicant -k"
-    fi
+			while [ $current_time -lt $end_time ]; do
+				ping -c1 -w1 $pinghost >/dev/null 2>&1
+				if [ $? -ne 0 ]; then
+					while true; do
+						echo "Authenticating" >>$LOG_FILE
+						/bin/ash -c "jmusupplicant -k"
+						/bin/ash -c "jmusupplicant -u$username -p$password -b -s0 --interface_card $ifname $cmd"
+						if [ $? -eq 0 ]; then
+							flag=1
+							echo "Authentication Success" >>$LOG_FILE
+							break
+						else
+							echo "Authentication failed, retrying..." >>$LOG_FILE
+							sleep 5
+						fi
+					done
+				fi
+				if [ $flag -eq 1 ]; then
+					break
+				fi
+				sleep $interval
+				current_time=$(date +%s)
+			done
+		else
+			while true; do
+				echo "Authenticating" >>$LOG_FILE
+				/bin/ash -c "jmusupplicant -k"
+				/bin/ash -c "jmusupplicant -u$username -p$password -b -s$netoperator --interface_card $ifname $cmd"
+				if [ $? -eq 0 ]; then
+					echo "Authentication Success" >>$LOG_FILE
+					break
+				else
+					echo "Authentication failed, retrying..." >>$LOG_FILE
+					sleep 5
+				fi
+			done
+		fi
+
+		echo "AUTH END" >>$LOG_FILE
+
+		crontab_file="/etc/crontabs/root"
+		if [ ! -f "$crontab_file" ]; then
+			touch "$crontab_file"
+		fi
+		if [ $enable ] && [ $cronset ]; then
+			echo "Cronset: Configure" >>$LOG_FILE
+			sed -i '/jmusupplicant/d' $crontab_file
+			echo "10 6 * * * sed -i '/midnight/d' '/etc/config/jmusupplicant'; /etc/init.d/jmusupplicant restart" >>$crontab_file
+			echo "0 23 * * 0-4 echo option midnight \\'1\\' >> '/etc/config/jmusupplicant'; /etc/init.d/jmusupplicant restart" >>$crontab_file
+			echo "59 23 * * 5,6 echo option midnight \\'1\\' >> '/etc/config/jmusupplicant'; /etc/init.d/jmusupplicant restart" >>$crontab_file
+			crontab $crontab_file
+		else
+			echo "Cronset: Removing" >>$LOG_FILE
+			sed -i '/jmusupplicant/d' $crontab_file
+			crontab $crontab_file
+		fi
+	else
+		/bin/ash -c "jmusupplicant -k"
+	fi
 }
 
-start()
-{
-    config_load jmusupplicant
-    config_foreach run_jmusupplicant jmusupplicant
+start() {
+	config_load jmusupplicant
+	config_foreach run_jmusupplicant jmusupplicant
 }
 
-stop()
-{
-    killall jmusupplicant
+stop() {
+	killall jmusupplicant
 }
 
-restart()
-{
-    jmusupplicant -k
-    sleep 1
-    config_load jmusupplicant
-    config_foreach run_jmusupplicant jmusupplicant
+restart() {
+	jmusupplicant -k
+	sleep 1
+	config_load jmusupplicant
+	config_foreach run_jmusupplicant jmusupplicant
 }
