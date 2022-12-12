@@ -62,7 +62,7 @@ run_jmusupplicant() {
 
 		if [ $midnight ]; then
 			interval=15
-			duration=360
+			duration=600
 			start_time=$(date +%s)
 			end_time=$((start_time + duration))
 			current_time=$start_time
