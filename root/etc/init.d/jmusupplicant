@@ -74,6 +74,7 @@ run_jmusupplicant() {
                     while true; do
                         echo "Authenticating" >>$LOG_FILE
                         /bin/ash -c "jmusupplicant -k"
+                        /bin/ash -c "jmuEportalAuth -k"
                         /bin/ash -c "jmusupplicant -u$username -p$password -b -s0 --interface_card $ifname $cmd"
                         if [ $? -eq 0 ]; then
                             flag=1
@@ -93,15 +94,19 @@ run_jmusupplicant() {
             done
         else
             while true; do
+                if [ $cronset ]; then
+                    sleep 3000
+                done
                 echo "Authenticating" >>$LOG_FILE
                 /bin/ash -c "jmusupplicant -k"
-                /bin/ash -c "jmusupplicant -u$username -p$password -b -s$netoperator --interface_card $ifname $cmd"
+                /bin/ash -c "jmuEportalAuth -k"
+                /bin/ash -c "jmuEportalAuth -u $username -p $password -s $netoperator"
                 if [ $? -eq 0 ]; then
                     echo "Authentication Success" >>$LOG_FILE
                     break
                 else
-                    echo "Authentication failed, retrying..." >>$LOG_FILE
-                    sleep 5
+                    echo "Authentication failed, maybe account or password is wrong?" >>$LOG_FILE
+                    break
                 fi
             done
         fi
@@ -126,6 +131,7 @@ run_jmusupplicant() {
         fi
     else
         /bin/ash -c "jmusupplicant -k"
+        /bin/ash -c "jmuEportalAuth -k"
     fi
 }
 
@@ -136,10 +142,12 @@ start() {
 
 stop() {
     killall jmusupplicant
+    killall jmuEportalAuth
 }
 
 restart() {
     jmusupplicant -k
+    jmuEportalAuth -k
     sleep 1
     config_load jmusupplicant
     config_foreach run_jmusupplicant jmusupplicant
