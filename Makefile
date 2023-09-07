@@ -1,7 +1,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=Ruijie Authentication in JMU campus Client for LuCI
-LUCI_DEPENDS:=+jmusupplicant +jmuEportalAuth
+LUCI_DEPENDS:=+jmusupplicant
 LUCI_PKGARCH:=all
 
 PKG_NAME:=luci-app-jmusupplicant

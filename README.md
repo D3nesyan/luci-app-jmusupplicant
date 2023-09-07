@@ -8,7 +8,7 @@ Openwrt/LEDE LuCI for JMUSupplicant
 注意
 ---
 本 LuCI 应用依赖 jmusupplicant。</br>
-请安装通过下面教程编译出的 3 个 ipk 文件。(jmusupplicant & jmuEportalAuth & luci-app-jmusupplicant)
+请安装通过下面教程编译出的 2 个 ipk 文件。(jmusupplicant & luci-app-jmusupplicant)
 
 编译
 ---
@@ -19,7 +19,6 @@ $ cd package
 $ git clone https://github.com/D3nesyan/jmuSupplicant-OpenWrt-ipk.git jmusupplicant
 #克隆插件源码
 $ git clone https://github.com/D3nesyan/luci-app-jmusupplicant.git
-$ git clone https://github.com/D3nesyan/jmuEportalAuth.git
 #返回上一层目录
 $ cd ..
 #配置
