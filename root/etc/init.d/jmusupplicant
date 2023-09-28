@@ -41,12 +41,14 @@ run_jmusupplicant() {
         config_get dns $1 dns
         config_get_bool midnight $1 midnight
         config_get_bool cronset $1 cronset
+        config_get_bool autoreconnect $1 autoreconnect
 
         echo "IPaddr: $ipaddr" >>$LOG_FILE
         echo "Mask: $mask" >>$LOG_FILE
         echo "Gateway: $gateway" >>$LOG_FILE
         echo "DNS Server: $dns" >>$LOG_FILE
         echo "Midnight Mode: $midnight" >>$LOG_FILE
+        echo "Auto Reconnect: $autoreconnect" >>$LOG_FILE
 
         if [ $midnight ]; then
             cmd="$cmd -n"
@@ -123,6 +125,26 @@ run_jmusupplicant() {
             echo "Cronset: Removing" >>$LOG_FILE
             sed -i '/jmusupplicant/d' $crontab_file
             crontab $crontab_file
+        fi
+        # Detect if network is disconnected and reconnect
+        if [ $enable ] && [ $autoreconnect ] && [ ! $midnight ]; then
+            while true
+            do
+                ping -c 2 $pinghost > /dev/null
+                if [ $? -ne 0 ]; then
+                    echo "Network disconnection detected. Starting to execute reconnect script..."
+                    /bin/ash -c "jmusupplicant -k"
+                    /bin/ash -c "jmusupplicant -u$username -p$password -b -s$netoperator --interface_card $ifname $cmd"
+                    if [ $? -eq 0 ]; then
+                        echo "Authentication Success" >>$LOG_FILE
+                        break
+                    else
+                        echo "Authentication failed, retrying..." >>$LOG_FILE
+                        sleep 5
+                    fi
+                fi
+                sleep 1800
+            done
         fi
     else
         /bin/ash -c "jmusupplicant -k"
