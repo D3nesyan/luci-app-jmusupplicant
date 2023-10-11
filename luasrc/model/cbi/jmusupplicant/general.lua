@@ -71,8 +71,6 @@ netoperator.default = "0"
 
 midnight = o:taboption("base", Flag, "midnight", translate("断网模式"))
 
-autoreconnect = o:taboption("base", Flag, "autoreconnect", translate("在白天检测到断网自动重连"))
-
 ipaddr = o:taboption("base", Value, "ipaddr", translate("IP 地址"))
 ipaddr.description = translate("指定 IPV4 地址，如打开断网模式或自动重连功能，请在此填入无断网办公区域的 IP 地址")
 ipaddr.default = "0.0.0.0"
