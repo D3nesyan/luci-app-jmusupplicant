@@ -71,12 +71,16 @@ netoperator.default = "0"
 
 midnight = o:taboption("base", Flag, "midnight", translate("断网模式"))
 
-ipaddr = o:taboption("base", Value, "ipaddr", translate("IP 地址"))
-ipaddr.description = translate("指定 IPV4 地址，如打开断网模式或自动重连功能，请在此填入无断网办公区域的 IP 地址")
+ipaddr_midnight = o:taboption("base", Value, "ipaddr_midnight", translate("断网模式使用的 IP 地址"))
+ipaddr_midnight.description = translate("指定 IPV4 地址，如打开断网模式或自动重连功能，请在此填入无断网办公区域的 IP 地址")
+ipaddr_midnight.default = "0.0.0.0"
+
+ipaddr = o:taboption("advanced", Value, "ipaddr", translate("IP 地址"))
+ipaddr.description = translate("自定义 IP 地址")
 ipaddr.default = "0.0.0.0"
 
 cronset = o:taboption("base", Flag, "cronset", translate("自动重连"))
-cronset.description = translate("注意: 在节假日期间关闭该选项。本选项开启后, 将在每天 6:10, 周日到周四晚上 23:00, 周五到周六晚上 23:59 自动执行相关任务")
+cronset.description = translate("注意: 本选项使用 Crontab 实现。本选项开启后, 将在每天 6:10, 周日到周四晚上 23:00, 周五到周六晚上 23:59 自动执行相关任务")
 
 pinghost = o:taboption("base", Value, "pinghost", translate("Ping 主机"))
 pinghost.description = translate("用于检测网络状态的 Ping 主机地址，可设置成 0.0.0.0 以关闭该功能")

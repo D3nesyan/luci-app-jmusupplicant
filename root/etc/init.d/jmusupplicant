@@ -36,23 +36,27 @@ run_jmusupplicant() {
 
         config_get pinghost $1 pinghost
         config_get ipaddr $1 ipaddr
+        config_get ipaddr_midnight $1 ipaddr_midnight
         config_get mask $1 mask
         config_get gateway $1 gateway
         config_get dns $1 dns
         config_get_bool midnight $1 midnight
         config_get_bool cronset $1 cronset
 
+        echo "Midnight Mode: $midnight" >>$LOG_FILE
+        echo "IPaddr_midnight: $ipaddr_midnight for midnight mode" >>$LOG_FILE
         echo "IPaddr: $ipaddr" >>$LOG_FILE
         echo "Mask: $mask" >>$LOG_FILE
         echo "Gateway: $gateway" >>$LOG_FILE
         echo "DNS Server: $dns" >>$LOG_FILE
-        echo "Midnight Mode: $midnight" >>$LOG_FILE
 
         if [ $midnight ]; then
             cmd="$cmd -n"
-            if [ "$ipaddr" != "0.0.0.0" ] && [ "$ipaddr" != "" ]; then
-                cmd="$cmd --ip $ipaddr"
+            if [ "$ipaddr_midnight" != "0.0.0.0" ] && [ "$ipaddr_midnight" != "" ]; then
+                cmd="$cmd --ip $ipaddr_midnight"
             fi
+        else
+            if [ "$ipaddr" != "0.0.0.0" ] && [ "$ipaddr" != "" ]; then cmd="$cmd --ip $ipaddr"; fi
         fi
         if [ "$mask" != "0.0.0.0" ] && [ "$mask" != "" ]; then cmd="$cmd --mask $mask"; fi
         if [ "$gateway" != "0.0.0.0" ] && [ "$gateway" != "" ]; then cmd="$cmd -g$gateway"; fi
