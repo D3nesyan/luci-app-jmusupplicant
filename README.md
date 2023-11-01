@@ -34,6 +34,8 @@ $ make package/luci-app-jmusupplicant/compile V=s
 2. 在周日到周四的 23:00，开始检测是否断网。一旦检测到网络断开，将会打开断网模式并自动重连。
 3. 在周五和周六的 23:59, 开始检测是否断网。一旦检测到网络断开，将会打开断网模式并自动重连。
 
+- #### 自定义连接时使用的 IP 地址，网关，子网遮罩和 DNS 地址
+
 声明
 ---
 本项目基于 [luci-app-mentohust](https://github.com/immortalwrt/luci/commits/master/applications/luci-app-mentohust) 进行二次开发。
