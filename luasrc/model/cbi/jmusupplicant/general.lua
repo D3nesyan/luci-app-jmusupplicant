@@ -104,6 +104,8 @@ dnsserver = o:taboption("advanced", Value, "dns", translate("DNS 服务器"))
 dnsserver.description = translate("指定 DNS 服务器地址，可设置成 0.0.0.0 以关闭该功能")
 dnsserver.default = "0.0.0.0"
 
+no_internet_auth_only = o:taboption("advanced", Flag, "no_internet_auth_only", translate("仅在当前无网络时进行认证"))
+
 local apply = luci.http.formvalue("cbi.apply")
 if apply then
 	io.popen("/etc/init.d/jmusupplicant restart")

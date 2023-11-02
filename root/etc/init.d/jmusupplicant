@@ -28,11 +28,15 @@ run_jmusupplicant() {
     if [ $enable ] && [ $username ] && [ $password ] && [ $ifname ] && [ $netoperator ]; then
         local pinghost
         local ipaddr
+        local ipaddr_midnight
         local mask
         local gateway
         local dns
         local midnight
-        local cronset
+        local cronset_midnight
+        local advanced
+        local cronset_advanced
+        local no_internet_auth_only
 
         config_get pinghost $1 pinghost
         config_get ipaddr $1 ipaddr
@@ -44,7 +48,9 @@ run_jmusupplicant() {
         config_get_bool midnight $1 midnight
         config_get_bool cronset_midnight $1 cronset_midnight
         config_get_bool cronset_advanced $1 cronset_advanced
+        config_get_bool no_internet_auth_only $1 no_internet_auth_only
 
+        echo "No Internet Auth only: $no_internet_auth_only" >>$LOG_FILE
         echo "Cronset Midnight: $cronset_midnight" >>$LOG_FILE
         echo "Midnight Mode: $midnight" >>$LOG_FILE
         echo "IPaddr_midnight: $ipaddr_midnight for midnight mode" >>$LOG_FILE
@@ -72,7 +78,7 @@ run_jmusupplicant() {
         fi
         echo "AUTH START" >>$LOG_FILE
 
-        if [ $midnight ]; then
+        if [ $no_internet_auth_only ]; then
             interval=15
             duration=600
             start_time=$(date +%s)
@@ -129,15 +135,21 @@ run_jmusupplicant() {
                 echo "Cronset: Configured for midnight mode auto auth" >>$LOG_FILE
                 sed -i '/jmusupplicant/d' $crontab_file
                 echo "10 6 * * * sed -i '/midnight/d' '/etc/config/jmusupplicant'; /etc/init.d/jmusupplicant restart" >>$crontab_file
+                echo "10 6 * * * sed -i '/no_internet_auth_only/d' '/etc/config/jmusupplicant'; /etc/init.d/jmusupplicant restart" >>$crontab_file
                 echo "0 23 * * 0-4 echo option midnight \\'1\\' >> '/etc/config/jmusupplicant'; /etc/init.d/jmusupplicant restart" >>$crontab_file
+                echo "0 23 * * 0-4 echo option no_internet_auth_only \\'1\\' >> '/etc/config/jmusupplicant'; /etc/init.d/jmusupplicant restart" >>$crontab_file
                 echo "59 23 * * 5,6 echo option midnight \\'1\\' >> '/etc/config/jmusupplicant'; /etc/init.d/jmusupplicant restart" >>$crontab_file
+                echo "59 23 * * 5,6 echo option no_internet_auth_only \\'1\\' >> '/etc/config/jmusupplicant'; /etc/init.d/jmusupplicant restart" >>$crontab_file
                 crontab $crontab_file
             elif [ $cronset_advanced ]; then
                 echo "Cronset: Configured for auto enabling advanced mode" >>$LOG_FILE
                 sed -i '/jmusupplicant/d' $crontab_file
                 echo "10 6 * * * sed -i '/advanced/d' '/etc/config/jmusupplicant'; /etc/init.d/jmusupplicant restart" >>$crontab_file
+                echo "10 6 * * * sed -i '/no_internet_auth_only/d' '/etc/config/jmusupplicant'; /etc/init.d/jmusupplicant restart" >>$crontab_file
                 echo "0 23 * * 0-4 echo option advanced \\'1\\' >> '/etc/config/jmusupplicant'; /etc/init.d/jmusupplicant restart" >>$crontab_file
+                echo "0 23 * * 0-4 echo option no_internet_auth_only \\'1\\' >> '/etc/config/jmusupplicant'; /etc/init.d/jmusupplicant restart" >>$crontab_file
                 echo "59 23 * * 5,6 echo option advanced \\'1\\' >> '/etc/config/jmusupplicant'; /etc/init.d/jmusupplicant restart" >>$crontab_file
+                echo "59 23 * * 5,6 echo option no_internet_auth_only \\'1\\' >> '/etc/config/jmusupplicant'; /etc/init.d/jmusupplicant restart" >>$crontab_file
                 crontab $crontab_file
             else
                 echo "Cronset: Removing" >>$LOG_FILE
