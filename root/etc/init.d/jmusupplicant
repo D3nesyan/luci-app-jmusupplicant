@@ -40,11 +40,16 @@ run_jmusupplicant() {
         config_get mask $1 mask
         config_get gateway $1 gateway
         config_get dns $1 dns
+        config_get_bool advanced $1 advanced
         config_get_bool midnight $1 midnight
-        config_get_bool cronset $1 cronset
+        config_get_bool cronset_midnight $1 cronset_midnight
+        config_get_bool cronset_advanced $1 cronset_advanced
 
+        echo "Cronset Midnight: $cronset_midnight" >>$LOG_FILE
         echo "Midnight Mode: $midnight" >>$LOG_FILE
         echo "IPaddr_midnight: $ipaddr_midnight for midnight mode" >>$LOG_FILE
+        echo "Advanced: $advanced" >>$LOG_FILE
+        echo "Cronset Advanced: $cronset_advanced" >>$LOG_FILE
         echo "IPaddr: $ipaddr" >>$LOG_FILE
         echo "Mask: $mask" >>$LOG_FILE
         echo "Gateway: $gateway" >>$LOG_FILE
@@ -56,12 +61,15 @@ run_jmusupplicant() {
                 cmd="$cmd --ip $ipaddr_midnight"
             fi
         else
-            if [ "$ipaddr" != "0.0.0.0" ] && [ "$ipaddr" != "" ]; then cmd="$cmd --ip $ipaddr"; fi
+            if [ $advanced ]; then
+                if [ "$ipaddr" != "0.0.0.0" ] && [ "$ipaddr" != "" ]; then cmd="$cmd --ip $ipaddr"; fi
+            fi
         fi
-        if [ "$mask" != "0.0.0.0" ] && [ "$mask" != "" ]; then cmd="$cmd --mask $mask"; fi
-        if [ "$gateway" != "0.0.0.0" ] && [ "$gateway" != "" ]; then cmd="$cmd -g$gateway"; fi
-        if [ "$dns" != "0.0.0.0" ] && [ "$dns" != "" ]; then cmd="$cmd -d$dns"; fi
-
+        if [ $advanced ]; then
+            if [ "$mask" != "0.0.0.0" ] && [ "$mask" != "" ]; then cmd="$cmd --mask $mask"; fi
+            if [ "$gateway" != "0.0.0.0" ] && [ "$gateway" != "" ]; then cmd="$cmd -g$gateway"; fi
+            if [ "$dns" != "0.0.0.0" ] && [ "$dns" != "" ]; then cmd="$cmd -d$dns"; fi
+        fi
         echo "AUTH START" >>$LOG_FILE
 
         if [ $midnight ]; then
@@ -116,17 +124,26 @@ run_jmusupplicant() {
         if [ ! -f "$crontab_file" ]; then
             touch "$crontab_file"
         fi
-        if [ $enable ] && [ $cronset ]; then
-            echo "Cronset: Configure" >>$LOG_FILE
-            sed -i '/jmusupplicant/d' $crontab_file
-            echo "10 6 * * * sed -i '/midnight/d' '/etc/config/jmusupplicant'; /etc/init.d/jmusupplicant restart" >>$crontab_file
-            echo "0 23 * * 0-4 echo option midnight \\'1\\' >> '/etc/config/jmusupplicant'; /etc/init.d/jmusupplicant restart" >>$crontab_file
-            echo "59 23 * * 5,6 echo option midnight \\'1\\' >> '/etc/config/jmusupplicant'; /etc/init.d/jmusupplicant restart" >>$crontab_file
-            crontab $crontab_file
-        else
-            echo "Cronset: Removing" >>$LOG_FILE
-            sed -i '/jmusupplicant/d' $crontab_file
-            crontab $crontab_file
+        if [ $enable ]; then
+            if [ $cronset_midnight ]; then
+                echo "Cronset: Configured for midnight mode auto auth" >>$LOG_FILE
+                sed -i '/jmusupplicant/d' $crontab_file
+                echo "10 6 * * * sed -i '/midnight/d' '/etc/config/jmusupplicant'; /etc/init.d/jmusupplicant restart" >>$crontab_file
+                echo "0 23 * * 0-4 echo option midnight \\'1\\' >> '/etc/config/jmusupplicant'; /etc/init.d/jmusupplicant restart" >>$crontab_file
+                echo "59 23 * * 5,6 echo option midnight \\'1\\' >> '/etc/config/jmusupplicant'; /etc/init.d/jmusupplicant restart" >>$crontab_file
+                crontab $crontab_file
+            elif [ $cronset_advanced ]; then
+                echo "Cronset: Configured for auto enabling advanced mode" >>$LOG_FILE
+                sed -i '/jmusupplicant/d' $crontab_file
+                echo "10 6 * * * sed -i '/advanced/d' '/etc/config/jmusupplicant'; /etc/init.d/jmusupplicant restart" >>$crontab_file
+                echo "0 23 * * 0-4 echo option advanced \\'1\\' >> '/etc/config/jmusupplicant'; /etc/init.d/jmusupplicant restart" >>$crontab_file
+                echo "59 23 * * 5,6 echo option advanced \\'1\\' >> '/etc/config/jmusupplicant'; /etc/init.d/jmusupplicant restart" >>$crontab_file
+                crontab $crontab_file
+            else
+                echo "Cronset: Removing" >>$LOG_FILE
+                sed -i '/jmusupplicant/d' $crontab_file
+                crontab $crontab_file
+            fi
         fi
     else
         /bin/ash -c "jmusupplicant -k"

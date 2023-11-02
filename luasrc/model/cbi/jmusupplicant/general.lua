@@ -75,16 +75,22 @@ ipaddr_midnight = o:taboption("base", Value, "ipaddr_midnight", translate("断�
 ipaddr_midnight.description = translate("指定 IPV4 地址，如打开断网模式或自动重连功能，请在此填入无断网办公区域的 IP 地址。在断网模式未开启时，本选项将没有任何作用")
 ipaddr_midnight.default = "0.0.0.0"
 
-ipaddr = o:taboption("advanced", Value, "ipaddr", translate("IP 地址"))
-ipaddr.description = translate("自定义 IP 地址，可设置成 0.0.0.0 以关闭该功能")
-ipaddr.default = "0.0.0.0"
-
-cronset = o:taboption("base", Flag, "cronset", translate("自动重连"))
-cronset.description = translate("注意: 本选项使用 Crontab 实现。本选项开启后, 将在每天 6:10, 周日到周四晚上 23:00, 周五到周六晚上 23:59 自动执行相关任务")
+cronset_midnight = o:taboption("base", Flag, "cronset_midnight", translate("自动重连"))
+cronset_midnight.description = translate("注意: 本选项使用 Crontab 实现。本选项开启后, 将在每天 6:10, 周日到周四晚上 23:00, 周五到周六晚上 23:59 自动执行和断网模式有关的相关任务")
 
 pinghost = o:taboption("base", Value, "pinghost", translate("Ping 主机"))
 pinghost.description = translate("用于检测网络状态的 Ping 主机地址，可设置成 0.0.0.0 以关闭该功能")
 pinghost.default = "223.5.5.5"
+
+advanced = o:taboption("advanced", Flag, "advanced", translate("高级选项开关"))
+advanced.description = translate("仅在本开关开启后，高级选项中的设置内容生效")
+
+cronset_advanced = o:taboption("advanced", Flag, "cronset_advanced", translate("定时开启高级模式"))
+cronset_advanced.description = translate("注意: 本选项使用 Crontab 实现。本选项开启后, 将在每天 6:10, 周日到周四晚上 23:00, 周五到周六晚上 23:59 自动开启高级模式并重启插件")
+
+ipaddr = o:taboption("advanced", Value, "ipaddr", translate("IP 地址"))
+ipaddr.description = translate("自定义 IP 地址，可设置成 0.0.0.0 以关闭该功能")
+ipaddr.default = "0.0.0.0"
 
 mask = o:taboption("advanced", Value, "mask", translate("子网遮罩"))
 mask.description = translate("指定子网遮罩地址，可设置成 0.0.0.0 以关闭该功能")
