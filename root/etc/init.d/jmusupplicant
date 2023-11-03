@@ -92,7 +92,11 @@ run_jmusupplicant() {
                     while true; do
                         echo "Authenticating" >>$LOG_FILE
                         /bin/ash -c "jmusupplicant -k"
-                        /bin/ash -c "jmusupplicant -u$username -p$password -b -s0 --interface_card $ifname $cmd"
+                        if [ $midnight ]; then
+                            /bin/ash -c "jmusupplicant -u$username -p$password -b -s0 --interface_card $ifname $cmd"
+                        else
+                            /bin/ash -c "jmusupplicant -u$username -p$password -b -s$netoperator --interface_card $ifname $cmd"
+                        fi
                         if [ $? -eq 0 ]; then
                             flag=1
                             echo "Authentication Success" >>$LOG_FILE
