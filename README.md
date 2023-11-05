@@ -1,3 +1,5 @@
+#已有方法可以直接绕过断网，以及多设备检测。这个 Luci app 可以埋了
+
 Openwrt/LEDE LuCI for JMUSupplicant
 ===
 
